@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace RickAndMortyDataBase
 {
-    public class RickAndMortyDataBaseTest
+    public class RickAndMortyDataBaseTest : IDisposable
     {
         public RickAndMortyDataBaseTest()
         {
@@ -32,5 +32,24 @@ namespace RickAndMortyDataBase
             //Assert
             Assert.Equal(firstParasite, secondParasite);
         }
+        [Fact]
+        public void Test_Save_SavesToDatabase()
+        {
+            // Arernge
+            Parasite testParasite = new Parasite("Sleepy Gary");
+
+            // Act
+            testParasite.Save();
+            List<Parasite> result = Parasite.GetAll();
+            List<Parasite> testList = new List<Parasite>{testParasite};
+
+            // Assert
+            Assert.Equal(testList, result);
+        }
+
+        public void Dispose()
+          {
+            Parasite.DeleteAll();
+          }
     }
 }

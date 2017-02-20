@@ -40,6 +40,11 @@ namespace RickAndMortyDataBase
             return _name;
         }
 
+        public void SetName(string newName)
+        {
+            _name = newName;
+        }
+
         public static List<Parasite> GetAll()
         {
             List<Parasite> allParasites = new List<Parasite>{};
@@ -68,5 +73,41 @@ namespace RickAndMortyDataBase
 
             return allParasites;
         }
+
+        public void Save()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO parasites (name) OUTPUT INSERTED.id VALUES (@ParasiteName);", conn);
+
+            SqlParameter nameParameter = new SqlParameter();
+            nameParameter.ParameterName = "@ParasiteName";
+            nameParameter.Value = this.GetName();
+            cmd.Parameters.Add(nameParameter);
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while(rdr.Read())
+            {
+                this._id = rdr.GetInt32(0);
+            }
+            if (rdr != null)
+            {
+                rdr.Close();
+            }
+            if (conn != null)
+            {
+                conn.Close();
+            }
+        }
+
+        public static void DeleteAll()
+          {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("DELETE FROM parasites;", conn);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+          }
     }
 }
