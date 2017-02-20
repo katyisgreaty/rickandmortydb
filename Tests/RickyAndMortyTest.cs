@@ -63,6 +63,19 @@ namespace RickAndMortyDataBase
             Assert.Equal(testId, result);
         }
 
+        [Fact]
+        public void Test_Find_FindsParasiteInDatabase()
+        {
+            // Arrange
+            Parasite testParasite = new Parasite("Pencilvestyr");
+            testParasite.Save();
+            // Act
+            Parasite foundParasite = Parasite.Find(testParasite.GetId());
+
+            // Assert
+            Assert.Equal(testParasite, foundParasite);
+        }
+
         public void Dispose()
           {
             Parasite.DeleteAll();

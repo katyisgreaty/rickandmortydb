@@ -101,6 +101,37 @@ namespace RickAndMortyDataBase
             }
         }
 
+        public static Parasite Find(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM parasites WHERE id = @ParasiteId;", conn);
+            SqlParameter parasiteIdParameter = new SqlParameter();
+            parasiteIdParameter.ParameterName = "@ParasiteId";
+            parasiteIdParameter.Value = id.ToString();
+            cmd.Parameters.Add(parasiteIdParameter);
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int foundParasiteId = 0;
+            string foundParasiteName = null;
+            while(rdr.Read())
+            {
+                foundParasiteId = rdr.GetInt32(0);
+                foundParasiteName = rdr.GetString(1);
+            }
+            Parasite foundParasite = new Parasite(foundParasiteName, foundParasiteId);
+            if (rdr != null)
+            {
+                rdr.Close();
+            }
+            if (conn != null)
+            {
+                conn.Close();
+            }
+            return foundParasite;
+        }
+
         public static void DeleteAll()
           {
             SqlConnection conn = DB.Connection();
