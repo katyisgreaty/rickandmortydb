@@ -35,7 +35,7 @@ namespace RickAndMortyDataBase
         [Fact]
         public void Test_Save_SavesToDatabase()
         {
-            // Arernge
+            // Arrange
             Parasite testParasite = new Parasite("Sleepy Gary");
 
             // Act
@@ -45,6 +45,22 @@ namespace RickAndMortyDataBase
 
             // Assert
             Assert.Equal(testList, result);
+        }
+
+        [Fact]
+        public void Test_Save_AssignsIdToObject()
+        {
+            //Arrange
+            Parasite testParasite = new Parasite("Hamurai");
+            //Act
+            testParasite.Save();
+            Parasite savedParasite = Parasite.GetAll()[0];
+
+            int result = savedParasite.GetId();
+            int testId = testParasite.GetId();
+
+            //Assert
+            Assert.Equal(testId, result);
         }
 
         public void Dispose()
